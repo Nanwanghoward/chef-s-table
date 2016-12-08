@@ -41,6 +41,7 @@ public class GoogleMap extends JFrame{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		setMarkers();
 		
 	}
 	
@@ -54,5 +55,29 @@ public class GoogleMap extends JFrame{
 		return latitude + ',' + longitude;
 	}
 	
+	private void setMarkers(){
+		if (result == null){
+			return;
+		}
+		String setCenter = "var mapOptions = {" + 
+		         "center: new google.maps.LatLng(" + getLocation(result.get(0))+ ")," + 
+		         "zoom: 10" +
+		       "};" + 
+		       "map = new google.maps.Map(document.getElementById(\"map-canvas\"), mapOptions);";
+		browser.executeJavaScript(setCenter);
+		
+		for (JSONObject jsonObject : result){
+
+			String javaScript = "var myLatLng = new google.maps.LatLng(" + getLocation(jsonObject) + ");\n"
+	                + "var marker = new google.maps.Marker({\n"+
+	                "position: myLatLng,\n"+
+	                "map: map\n,"+              
+	              "});\n"+
+	              "marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');\n"+
+	              "markers.push(marker);\n";
+			browser.executeJavaScript(javaScript);
+
+		}
+	}
 	
 }
