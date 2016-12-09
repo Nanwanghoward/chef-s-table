@@ -7,27 +7,25 @@ import java.util.ArrayList;
 
 public class FileWrite {
 	
-	public FileWrite(ArrayList<String> info) {
-		write(info);
-	}
-	
-	private void write(ArrayList<String> info) {
+	public static void writeConfidential(ArrayList<String> info) {
 		try {
-			File file = new File("confidential.txt");
-			FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);   // true ---> append data
+			File file = new File("userinfo/confidential.txt");
+			FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true); // true
+																					// --->
+																					// append
+																					// data
 			BufferedWriter bw = new BufferedWriter(fileWriter);
-			
-			bw.newLine();
-			
-			for (String string : info){
+
+			for (String string : info) {
 				bw.write(string);
 				bw.write(' ');
 			}
-			
+			bw.newLine();
 			bw.close();
-			
+
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
+
 }
