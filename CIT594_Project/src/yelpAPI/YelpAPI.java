@@ -1,4 +1,5 @@
 package yelpAPI;
+
 import java.util.*;
 
 import org.json.simple.JSONArray;
@@ -15,8 +16,6 @@ import org.scribe.oauth.OAuthService;
 import com.beust.jcommander.Parameter;
 
 import GUI.FileWrite;
-
-
 
 /**
  * Code sample for accessing the Yelp API V2.
@@ -51,33 +50,38 @@ public class YelpAPI {
 
 	OAuthService service;
 	Token accessToken;
-	
+
+	/**
+	 * Constructs YelpAPI according to user input
+	 * 
+	 * @param term
+	 * @param location
+	 * @param limit
+	 */
 	public YelpAPI(String term, String location, int limit) {
 		this(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
-		
+
 		if (term.trim() != "") {
 			YelpAPI.DEFAULT_TERM = term.trim();
 		}
-		
+
 		if (location.trim() != "") {
 			YelpAPI.DEFAULT_LOCATION = location.trim();
 		}
-		
+
 		if (limit > 0 && limit <= 10) {
 			YelpAPI.SEARCH_LIMIT = limit;
 		}
 	}
+
 	/**
 	 * Setup the Yelp API OAuth credentials.
 	 *
-	 * @param consumerKey
-	 *            Consumer key
-	 * @param consumerSecret
-	 *            Consumer secret
-	 * @param token
-	 *            Token
-	 * @param tokenSecret
-	 *            Token secret
+	 * @param consumerKey Consumer key           
+	 * @param consumerSecret Consumer secret          
+	 * @param token Token           
+	 * @param tokenSecret Token secret
+	 *            
 	 */
 	public YelpAPI(String consumerKey, String consumerSecret, String token, String tokenSecret) {
 		this.service = new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(consumerKey).apiSecret(consumerSecret)
@@ -92,10 +96,8 @@ public class YelpAPI {
 	 * <a href="http://www.yelp.com/developers/documentation/v2/search_api">Yelp
 	 * Search API V2</a> for more info.
 	 *
-	 * @param term
-	 *            <tt>String</tt> of the search term to be queried
-	 * @param location
-	 *            <tt>String</tt> of the location
+	 * @param term <tt>String</tt> of the search term to be queried           
+	 * @param location  <tt>String</tt> of the location         
 	 * @return <tt>String</tt> JSON Response
 	 */
 	public String searchForBusinessesByLocation(String term, String location) {
@@ -113,8 +115,7 @@ public class YelpAPI {
 	 * <a href="http://www.yelp.com/developers/documentation/v2/business">Yelp
 	 * Business API V2</a> for more info.
 	 *
-	 * @param businessID
-	 *            <tt>String</tt> business ID of the requested business
+	 * @param businessID <tt>String</tt> business ID of the requested business          
 	 * @return <tt>String</tt> JSON Response
 	 */
 	public String searchByBusinessId(String businessID) {
@@ -126,8 +127,7 @@ public class YelpAPI {
 	 * Creates and returns an {@link OAuthRequest} based on the API endpoint
 	 * specified.
 	 *
-	 * @param path
-	 *            API endpoint to be queried
+	 * @param path  API endpoint to be queried        
 	 * @return <tt>OAuthRequest</tt>
 	 */
 	private OAuthRequest createOAuthRequest(String path) {
@@ -138,8 +138,7 @@ public class YelpAPI {
 	/**
 	 * Sends an {@link OAuthRequest} and returns the {@link Response} body.
 	 *
-	 * @param request
-	 *            {@link OAuthRequest} corresponding to the API request
+	 * @param request {@link OAuthRequest} corresponding to the API request         
 	 * @return <tt>String</tt> body of API response
 	 */
 	private String sendRequestAndGetResponse(OAuthRequest request) {
@@ -150,15 +149,15 @@ public class YelpAPI {
 	}
 
 	/**
-	 * Queries the Search API based on the command line arguments and takes the
-	 * first result to query the Business API.
+	 * Queries the Search API based on the user input arguments
+	 * Returns all the JSON results in form of String stored in the ArrayList
 	 *
-	 * @param yelpApi
-	 *            <tt>YelpAPI</tt> service instance
-	 * @param yelpApiCli
-	 *            <tt>YelpAPICLI</tt> command line arguments
+	 * @param yelpApi <tt>YelpAPI</tt> service instance         
+	 * @param yelpApiCli  <tt>YelpAPICLI</tt> command line arguments         
 	 */
 	private static ArrayList<String> queryAPI(YelpAPI yelpApi, YelpAPICLI yelpApiCli) {
+		
+		//using YELP search API
 		String searchResponseJSON = yelpApi.searchForBusinessesByLocation(yelpApiCli.term, yelpApiCli.location);
 
 		FileWrite f = new FileWrite();
@@ -175,38 +174,18 @@ public class YelpAPI {
 
 		JSONArray businesses = (JSONArray) response.get("businesses");
 		int resNum = businesses.size();
-		//System.out.println(resNum + " bussinesses found");
-		
-		ArrayList<String> output = new ArrayList<>();
 
+		ArrayList<String> output = new ArrayList<>();
+		
+		//using YELP business API-revised version
+		//traverse to output each JSON result
 		for (int i = 0; i < resNum; i++) {
 			JSONObject b = (JSONObject) businesses.get(i);
 			String bID = b.get("id").toString();
 			String businessResponseJSON = yelpApi.searchByBusinessId(bID.toString());
 			output.add(businessResponseJSON);
-			
-			
-//			System.out.println(String.format("Result for business \"%s\" found:", bID));
-//			System.out.println(businessResponseJSON);
-//			f.writeJSON(businessResponseJSON, "JSONtxt/test1.txt");
-			
 		}
 		return output;
-
-		// JSONArray businesses = (JSONArray) response.get("businesses");
-		// JSONObject firstBusiness = (JSONObject) businesses.get(0);
-		// String firstBusinessID = firstBusiness.get("id").toString();
-		// System.out.println(String.format(
-		// "%s businesses found, querying business info for the top result
-		// \"%s\" ...",
-		// businesses.size(), firstBusinessID));
-		//
-		// // Select the first business and display business details
-		// String businessResponseJSON =
-		// yelpApi.searchByBusinessId(firstBusinessID.toString());
-		// System.out.println(String.format("Result for business \"%s\" found:",
-		// firstBusinessID));
-		// System.out.println(businessResponseJSON);
 	}
 
 	/**
@@ -218,38 +197,22 @@ public class YelpAPI {
 
 		@Parameter(names = { "-l", "--location" }, description = "Location to be Queried")
 		public String location = DEFAULT_LOCATION;
-	
-	
+
 	}
 	
+	/**
+	 * The newly added method for querying API based on user input of term, location and result limit
+	 * Returns all query results in form of string stored in ArrayList
+	 * @param term
+	 * @param location
+	 * @param limit
+	 * @return ArrayList<String>
+	 */
 	public static ArrayList<String> search(String term, String location, int limit) {
-		
+
 		YelpAPI yelpApi = new YelpAPI(term, location, limit);
 		YelpAPICLI yelpApiCli = new YelpAPICLI();
-		
-		
+
 		return queryAPI(yelpApi, yelpApiCli);
 	}
-
-	/**
-	 * Main entry for sample Yelp API requests.
-	 * <p>
-	 * After entering your OAuth credentials, execute <tt><b>run.sh</b></tt> to
-	 * run this example.
-	 */
-	//public static void main(String[] args) {
-	//	ArrayList<String> str = YelpAPI.search("sangkee noodle house", "Philadelphia, PA", 5);
-	//	for(String s : str) {
-	//		System.out.println(s);
-	//	}
-		
-		
-		
-		
-//		YelpAPICLI yelpApiCli = new YelpAPICLI();
-//		new JCommander(yelpApiCli, args);
-//
-//		YelpAPI yelpApi = new YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
-//		queryAPI(yelpApi, yelpApiCli);
-	//}
 }
