@@ -11,7 +11,7 @@ import JSONParse.JSONParse;
 import org.json.simple.JSONObject;
 
 public class FileRead {
-	
+	// read in search history of a specific user.
 	public static HashMap<String, ArrayList<JSONObject>> readSearchHistory(String username) throws FileNotFoundException {
 		HashMap<String, ArrayList<JSONObject>> res = new HashMap<>();
 			try {
