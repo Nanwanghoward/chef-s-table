@@ -38,6 +38,7 @@ public class HomePage extends JFrame {
 		setResizable(false);
 		fileRead();
 		
+		// import background pics
 		try {
 			image1 = ImageIO.read(new File("pictures/imag1.jpg"));
 			background = new JLabel(new ImageIcon(image1));
@@ -46,6 +47,7 @@ public class HomePage extends JFrame {
 			e.printStackTrace();
 		}
 		
+		// three useful buttons
 		loginButton = new JButton("Login");
 		signupButton = new JButton("Signup");
 		exitButton = new JButton("Exit");
@@ -60,8 +62,10 @@ public class HomePage extends JFrame {
 		getContentPane().setLayout(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// add all listeners to buttons
 		addActionListeners();
 		
+		//adjust positon and size
 		user.setBounds(200, 200, 120, 40);
 		psd.setBounds(200, 230, 120, 40);
 		
@@ -75,7 +79,7 @@ public class HomePage extends JFrame {
 		flash.setBounds(300, 330, 100, 100);
 		flash.setSize(500, 100);
 		
-
+		// add to panel
 		getContentPane().add(user);
 		getContentPane().add(psd);
 		getContentPane().add(textField);
@@ -102,9 +106,11 @@ public class HomePage extends JFrame {
 					setVisible(false);
 					User user = new User(username, psd);
 					
+					// login successfully and open searchPage
 					SearchPage searchPage = new SearchPage(user);
 					
 				} else {
+					// login failure message
 					flash.setText("Login failure!");
 					flash.setVisible(true);
 				}
@@ -118,6 +124,7 @@ public class HomePage extends JFrame {
 				String username = textField.getText();
 				String psd = String.valueOf(passwordField.getPassword());
 				if (confidential.containsKey(username)){
+					// do not allow identical username
 					flash.setText("Username already taken!");
 					flash.setVisible(true);
 				} else {
