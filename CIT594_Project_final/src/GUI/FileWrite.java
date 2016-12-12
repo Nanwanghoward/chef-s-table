@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class FileWrite {
-	
+	// write to confidential.txt, used to update confidential information
 	public static void writeConfidential(ArrayList<String> info) {
 		try {
 			File file = new File("userinfo/confidential.txt");
