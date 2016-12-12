@@ -30,6 +30,7 @@ public class GoogleMap extends JFrame{
 		File file = new File("");
 		String path;
 		path = file.getAbsolutePath();
+		// use the local map HTML page
 		browser.loadURL("file://" + path + "/map.html");
 	
 		
@@ -45,6 +46,7 @@ public class GoogleMap extends JFrame{
 		
 	}
 	
+	// extract longitude and latitude information from json obj
 	private String getLocation(JSONObject jsonObject){
 		String longitude;
 		String latitude;
@@ -55,10 +57,15 @@ public class GoogleMap extends JFrame{
 		return latitude + ',' + longitude;
 	}
 	
+	
+	
+	// use simple js in maps website and set markers of restaurants
 	private void setMarkers(){
 		if (result == null){
 			return;
 		}
+		
+		// set the center of map to align with current searching area
 		String setCenter = "var mapOptions = {" + 
 		         "center: new google.maps.LatLng(" + getLocation(result.get(0))+ ")," + 
 		         "zoom: 10" +
@@ -66,6 +73,7 @@ public class GoogleMap extends JFrame{
 		       "map = new google.maps.Map(document.getElementById(\"map-canvas\"), mapOptions);";
 		browser.executeJavaScript(setCenter);
 		
+		// set markers according to location info from json obj
 		for (JSONObject jsonObject : result){
 
 			String javaScript = "var myLatLng = new google.maps.LatLng(" + getLocation(jsonObject) + ");\n"
