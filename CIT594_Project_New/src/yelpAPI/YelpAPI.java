@@ -175,7 +175,7 @@ public class YelpAPI {
 
 		JSONArray businesses = (JSONArray) response.get("businesses");
 		int resNum = businesses.size();
-		System.out.println(resNum + " bussinesses found");
+		//System.out.println(resNum + " bussinesses found");
 		
 		ArrayList<String> output = new ArrayList<>();
 
@@ -184,29 +184,10 @@ public class YelpAPI {
 			String bID = b.get("id").toString();
 			String businessResponseJSON = yelpApi.searchByBusinessId(bID.toString());
 			output.add(businessResponseJSON);
-			
-			
-//			System.out.println(String.format("Result for business \"%s\" found:", bID));
-//			System.out.println(businessResponseJSON);
-//			f.writeJSON(businessResponseJSON, "JSONtxt/test1.txt");
-			
+	
 		}
 		return output;
 
-		// JSONArray businesses = (JSONArray) response.get("businesses");
-		// JSONObject firstBusiness = (JSONObject) businesses.get(0);
-		// String firstBusinessID = firstBusiness.get("id").toString();
-		// System.out.println(String.format(
-		// "%s businesses found, querying business info for the top result
-		// \"%s\" ...",
-		// businesses.size(), firstBusinessID));
-		//
-		// // Select the first business and display business details
-		// String businessResponseJSON =
-		// yelpApi.searchByBusinessId(firstBusinessID.toString());
-		// System.out.println(String.format("Result for business \"%s\" found:",
-		// firstBusinessID));
-		// System.out.println(businessResponseJSON);
 	}
 
 	/**

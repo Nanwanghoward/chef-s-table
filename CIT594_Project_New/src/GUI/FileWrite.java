@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class FileWrite {
 	
+	// write to confidential.txt, used to update confidential information
 	public static void writeConfidential(ArrayList<String> info) {
 		try {
 			File file = new File("userinfo/confidential.txt");
@@ -27,29 +28,5 @@ public class FileWrite {
 			e.printStackTrace();
 		}
 	}
-
-	/*
-	public void writeJSON(String info, String fileName) {
-
-		try {
-			File file = new File(fileName);
-			FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true); // true
-																					// --->
-																					// append
-																					// data
-			BufferedWriter bw = new BufferedWriter(fileWriter);
-
-			bw.newLine();
-
-			bw.write(info);
-			bw.write("\n");
-
-			bw.close();
-
-		} catch (Exception e) {
-		}
-	}
-	*/
-	
 
 }

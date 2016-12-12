@@ -22,15 +22,6 @@ public class User {
 	
 		try {
 			this.searchHistory = FileRead.readSearchHistory(username);
-			System.out.println("search history size is " + searchHistory.size());
-			for (String string : searchHistory.keySet()){
-				System.out.println("key is " + string);
-				System.out.println("the size of this value is " + searchHistory.get(string).size());
-				for (JSONObject jsonObject : searchHistory.get(string)){
-					System.out.println(jsonObject.toJSONString());
-				}
-				//writeSearchHistory(string, searchHistory.get(string));
-			}
 			
 		} catch (Exception e) {
 			this.searchHistory = new HashMap<String, ArrayList<JSONObject>>();
@@ -58,6 +49,8 @@ public class User {
 		return this.getPassword();
 	}
 	
+	
+	// once user has searched sth, write the results to his search history txt file.
 	public void writeSearchHistory(String key, ArrayList<JSONObject> value) {
 		searchHistory.put(key, value);
 		try {
@@ -84,6 +77,7 @@ public class User {
 	
 	}
 	
+	// return the user's search history as a hash map
 	public HashMap<String, ArrayList<JSONObject>> getSearchHistory(){
 		if (searchHistory == null || searchHistory.isEmpty()){
 			return null;
@@ -92,6 +86,7 @@ public class User {
 		}
 	}
 	
+	// get search history according to the key
 	public ArrayList<JSONObject> getSearchHistory(String key){
 		if (searchHistory.containsKey(key)){
 			return searchHistory.get(key);

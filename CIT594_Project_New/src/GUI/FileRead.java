@@ -12,44 +12,46 @@ import org.json.simple.JSONObject;
 
 public class FileRead {
 	
+	// read in search history of a specific user.
 	public static HashMap<String, ArrayList<JSONObject>> readSearchHistory(String username) throws FileNotFoundException {
 		HashMap<String, ArrayList<JSONObject>> res = new HashMap<>();
 			try {
 			      File file = new File("userinfo/" + username + ".txt");
+			      
+			      // if this user does not have a history yet, create a new txt for it.
 			      if (file.createNewFile()){
-			        System.out.println("File is created!");
+			      
 			      }else{
-			        System.out.println("File already exists.");
+			    	  
 			      }
 			      
 			      BufferedReader br1 = new BufferedReader(new FileReader(file));
 			      String key, value;
 			      int len;
 			      
-			      System.out.println("===================");
+			      // read in user's search history
 			      while((key = br1.readLine()) != null && (value = br1.readLine()) != null){
 			    	  ArrayList<JSONObject> jsonArray = new ArrayList<>();
 			    	  len = Integer.parseInt(value);
-			    	  System.out.println("we need to read " + len + " line.");
 			    	  while (len > 0){
 			    		  value = br1.readLine();
 				    	  jsonArray.add(JSONParse.getJSON(value));
 			    		  len--;
 			    	  }
 			    	  res.put(key, jsonArray);
-			    	  
 			      }
-			      System.out.println("===================");
+
 				  br1.close();
 			      
 		    	} catch (IOException e) {
 			      e.printStackTrace();
 			}
-			System.out.println(res.size());
 			
 		return res;
 	}
 	
+	
+	// read in confidential info. this should be done once user happens this applet
 	public static HashMap<String, String> readConfidential(String fileName) {
 		BufferedReader br;
 		HashMap<String, String> confidential = new HashMap<>();
