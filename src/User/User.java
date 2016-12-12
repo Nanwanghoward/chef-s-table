@@ -22,16 +22,6 @@ public class User {
 	
 		try {
 			this.searchHistory = FileRead.readSearchHistory(username);
-			//System.out.println("search history size is " + searchHistory.size());
-			//for (String string : searchHistory.keySet()){
-				//System.out.println("key is " + string);
-				//System.out.println("the size of this value is " + searchHistory.get(string).size());
-				//for (JSONObject jsonObject : searchHistory.get(string)){
-				//	System.out.println(jsonObject.toJSONString());
-				//}
-				//writeSearchHistory(string, searchHistory.get(string));
-			//}
-			
 		} catch (Exception e) {
 			this.searchHistory = new HashMap<String, ArrayList<JSONObject>>();
 		}

@@ -15,8 +15,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import User.User;
-import java.awt.Dimension;
-import java.awt.Rectangle;
 
 public class HomePage extends JFrame {
 	private HashMap<String, String> confidential;
@@ -38,8 +36,6 @@ public class HomePage extends JFrame {
 		
 		super(name);
 		setResizable(false);
-		setTitle("Home");
-		setLocationRelativeTo(null);
 		fileRead();
 		
 		try {

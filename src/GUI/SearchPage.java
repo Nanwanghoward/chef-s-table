@@ -31,7 +31,7 @@ public class SearchPage extends JFrame {
 	private JTextField term;
 	private JTextField location;
 	private JTextArea historyText;
-	private JButton Gmap, searchButton, sortByButton;
+	private JButton Gmap, searchButton, sortByButton, lgButton;
 	private ArrayList<JSONObject> value;
 	private JComboBox<Object> filterLimit, sortBy;
 	private JTextArea resultText;
@@ -188,7 +188,7 @@ public class SearchPage extends JFrame {
 		// show map button
 		Gmap = new JButton("Show Map");
 		Gmap.setFont(new Font("Hiragino Kaku Gothic StdN", Font.PLAIN, 20));
-		Gmap.setBounds(1039, 120, 155, 50);
+		Gmap.setBounds(1040, 185, 155, 50);
 		getContentPane().add(Gmap);
 
 		// find button
@@ -196,7 +196,8 @@ public class SearchPage extends JFrame {
 		searchButton.setFont(new Font("Hiragino Kaku Gothic StdN", Font.PLAIN, 57));
 		searchButton.setBounds(290, 60, 740, 110);
 		getContentPane().add(searchButton);
-
+		
+		// sort by combobox
 		sortBy = new JComboBox<Object>(new Object[] {});
 		sortBy.setModel(new DefaultComboBoxModel(new String[] { "Rating", "Review Count" }));
 		sortBy.setSelectedIndex(0);
@@ -204,7 +205,8 @@ public class SearchPage extends JFrame {
 		sortBy.setFont(new Font("Apple SD Gothic Neo", Font.PLAIN, 16));
 		sortBy.setBounds(787, 182, 105, 53);
 		getContentPane().add(sortBy);
-
+		
+		// sort by button
 		sortByButton = new JButton("Sort By");
 		sortByButton.setFont(new Font("Hiragino Kaku Gothic Std", Font.PLAIN, 16));
 		sortByButton.setBounds(905, 190, 125, 40);
@@ -215,11 +217,25 @@ public class SearchPage extends JFrame {
 		addActionListeners();
 		getContentPane().setBackground(new Color(255, 255, 240));
 		
+		// search result limitation label
 		JLabel sLimit = new JLabel("Search Limit");
 		sLimit.setHorizontalAlignment(SwingConstants.CENTER);
 		sLimit.setFont(new Font("Apple SD Gothic Neo", Font.BOLD, 18));
 		sLimit.setBounds(1040, 5, 150, 35);
 		getContentPane().add(sLimit);
+		
+		// log out button
+		lgButton = new JButton("Log Out");
+		lgButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				HomePage homePage = new HomePage("CIT594");
+				
+			}
+		});
+		lgButton.setFont(new Font("Hiragino Kaku Gothic StdN", Font.PLAIN, 20));
+		lgButton.setBounds(1040, 104, 155, 50);
+		getContentPane().add(lgButton);
 
 	}
 
@@ -247,16 +263,16 @@ public class SearchPage extends JFrame {
 				String item = term.getText();
 				String loc = location.getText();
 				
+				// if input is empty
 				if (item.trim().length() == 0 || loc.trim().length() == 0) {
 					JOptionPane.showMessageDialog(getContentPane(), "Please enter item and location!");
 					return;
 				}
-
+				
+				// inital rating labels
 				for (int i = 0; i < ratingLabels.size(); i++) {
 					ratingLabels.get(i).setVisible(false);
 				}
-
-				
 
 				// call yelp API for searching
 				ArrayList<String> reStrings = YelpAPI.search(item, loc,
@@ -330,19 +346,20 @@ public class SearchPage extends JFrame {
 			}
 		});
 
+		// add listener to sort by button
 		sortByButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String condition = sortBy.getSelectedItem().toString();
 				PriorityQueue<JSONObject> res = new PriorityQueue<>();
-				for (int i = 0; i < value.size(); i++) {
-					System.out.println(value.get(i));
-				}
+				
+				// get sorted results back stored in priority queue
 				res = Sort.sort(value, condition);
 
 				String reString = "";
 
+				// adjust search results order and rating labels after sorting
 				int rating;
 				int c = 0;
 				while (!res.isEmpty()) {
@@ -351,6 +368,7 @@ public class SearchPage extends JFrame {
 
 					reString += js.get("name") + "   " + "TEL: " + js.get("display_phone") + "    Review Count:"
 							+ js.get("review_count") + "\n";
+					
 					switch (rating) {
 					case 0:
 						ratingLabels.get(c).setIcon(new ImageIcon("pictures/0.png"));

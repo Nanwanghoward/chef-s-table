@@ -17,20 +17,16 @@ public class FileRead {
 			try {
 			      File file = new File("userinfo/" + username + ".txt");
 			      if (file.createNewFile()){
-			        //System.out.println("File is created!");
 			      }else{
-			        //System.out.println("File already exists.");
 			      }
 			      
 			      BufferedReader br1 = new BufferedReader(new FileReader(file));
 			      String key, value;
 			      int len;
 			      
-			      //System.out.println("===================");
 			      while((key = br1.readLine()) != null && (value = br1.readLine()) != null){
 			    	  ArrayList<JSONObject> jsonArray = new ArrayList<>();
 			    	  len = Integer.parseInt(value);
-			    	  //System.out.println("we need to read " + len + " line.");
 			    	  while (len > 0){
 			    		  value = br1.readLine();
 				    	  jsonArray.add(JSONParse.getJSON(value));
@@ -39,13 +35,12 @@ public class FileRead {
 			    	  res.put(key, jsonArray);
 			    	  
 			      }
-			      //System.out.println("===================");
+			      
 				  br1.close();
 			      
 		    	} catch (IOException e) {
 			      e.printStackTrace();
 			}
-			System.out.println(res.size());
 			
 		return res;
 	}
