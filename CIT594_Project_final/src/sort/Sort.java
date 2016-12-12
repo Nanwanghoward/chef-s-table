@@ -5,6 +5,7 @@ import java.util.*;
 import org.json.simple.JSONObject;
 
 public class Sort {
+	// sort the arraylist of json objects according to the field specified by condition
 	public static PriorityQueue<JSONObject> sort(ArrayList<JSONObject> value, String condition) {
 		PriorityQueue<JSONObject> pq = new PriorityQueue<>(10, new Comparator<JSONObject>() {
 			@Override
