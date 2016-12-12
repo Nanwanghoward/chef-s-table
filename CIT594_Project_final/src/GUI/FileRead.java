@@ -16,6 +16,8 @@ public class FileRead {
 		HashMap<String, ArrayList<JSONObject>> res = new HashMap<>();
 			try {
 			      File file = new File("userinfo/" + username + ".txt");
+				
+				// if this user does not have a history yet, create a new txt for it.
 			      if (file.createNewFile()){
 			      }else{
 			      }
@@ -24,6 +26,7 @@ public class FileRead {
 			      String key, value;
 			      int len;
 			      
+				// read in user's search history
 			      while((key = br1.readLine()) != null && (value = br1.readLine()) != null){
 			    	  ArrayList<JSONObject> jsonArray = new ArrayList<>();
 			    	  len = Integer.parseInt(value);
@@ -45,6 +48,7 @@ public class FileRead {
 		return res;
 	}
 	
+	// read in confidential info. this should be done once user happens this applet
 	public static HashMap<String, String> readConfidential(String fileName) {
 		BufferedReader br;
 		HashMap<String, String> confidential = new HashMap<>();
