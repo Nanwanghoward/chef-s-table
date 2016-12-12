@@ -48,6 +48,8 @@ public class User {
 		return this.getPassword();
 	}
 	
+	
+	// once user has searched sth, write the results to his search history txt file.
 	public void writeSearchHistory(String key, ArrayList<JSONObject> value) {
 		searchHistory.put(key, value);
 		try {
@@ -74,6 +76,7 @@ public class User {
 	
 	}
 	
+	// return the user's search history as a hash map
 	public HashMap<String, ArrayList<JSONObject>> getSearchHistory(){
 		if (searchHistory == null || searchHistory.isEmpty()){
 			return null;
@@ -82,6 +85,8 @@ public class User {
 		}
 	}
 	
+	
+	// get search history according to the key
 	public ArrayList<JSONObject> getSearchHistory(String key){
 		if (searchHistory.containsKey(key)){
 			return searchHistory.get(key);
